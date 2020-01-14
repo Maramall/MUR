@@ -1,0 +1,32 @@
+#include <murAPI.hpp>
+int main()
+{
+    const int toSet = 70;
+    const int kP = 7;
+   int curs = 1,  v = -30;
+     mur.addDetectorToList(Object::RECTANGLE, 0);
+     bool isLineDetected = false;
+while (true){
+    int yaw = mur.getYaw();
+    int u =((540-yaw+curs)%360-180);
+    mur.setPortA(v-u);
+    mur.setPortB(v+u);
+     int depth = mur.getInputAOne();
+      int power = (depth - toSet) * kP * (-1);
+
+        mur.setPortC(power);
+    if(!isLineDetected)
+     for(auto obj : mur.getDetectedObjectsList(0)) {
+     if(obj.type == Object::RECTANGLE){
+         if(obj.angle <90){
+       curs +=obj.angle;
+         }else{
+       curs -=obj.angle - 90;
+               
+             }
+       isLineDetected = true;
+     }
+    }
+   }         
+        return 0;
+}
